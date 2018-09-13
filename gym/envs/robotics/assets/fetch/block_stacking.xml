@@ -13,12 +13,14 @@
         <texture name="texture:block_C" file="C.png" gridsize="1 1"></texture>
         <texture name="texture:block_D" file="D.png" gridsize="1 1"></texture>
         <texture name="texture:block_E" file="E.png" gridsize="1 1"></texture>
+        <texture name="texture:block_F" file="F.png" gridsize="1 1"></texture>
 
         <material name="material:block_A" texture="texture:block_A" rgba="0 0.9 0 1"></material>
         <material name="material:block_B" texture="texture:block_B" rgba="0 0.9 0 1"></material>
         <material name="material:block_C" texture="texture:block_C" rgba="0 0.9 0 1"></material>
         <material name="material:block_D" texture="texture:block_D" rgba="0 0.9 0 1"></material>
         <material name="material:block_E" texture="texture:block_E" rgba="0 0.9 0 1"></material>
+        <material name="material:block_F" texture="texture:block_F" rgba="0 0.9 0 1"></material>
     </asset>
 	
 	<worldbody>
@@ -61,6 +63,12 @@
             <joint name="object4:joint" type="free" damping="0.01"></joint>
             <geom size="0.025 0.025 0.025" type="box" condim="3" name="object4" material="material:block_E" mass="2"></geom>
             <site name="object4" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 1" type="sphere"></site>
+        </body>
+
+        <body name="object5" pos="0.025 0.025 0.025">
+            <joint name="object5:joint" type="free" damping="0.01"></joint>
+            <geom size="0.025 0.025 0.025" type="box" condim="3" name="object5" material="material:block_F" mass="2"></geom>
+            <site name="object5" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 1" type="sphere"></site>
         </body>
 
 		<light directional="true" ambient="0.2 0.2 0.2" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3" castshadow="false" pos="0 0 4" dir="0 0 -1" name="light0"></light>
