@@ -1,6 +1,8 @@
 from gym import utils
-from gym.envs.robotics import fetch_env
+from gym.envs.robotics import fetch_env, rotations
+from gym.envs.robotics import utils as robot_utils
 from random import uniform
+import numpy as np
 
 
 BLOCK_HEIGHT = 0.025
@@ -66,7 +68,7 @@ class FetchBlockStacking(fetch_env.FetchEnv, utils.EzPickle):
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         dt = self.sim.nsubsteps * self.sim.model.opt.timestep
         grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
-        robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
+        robot_qpos, robot_qvel = robot_utils.robot_get_obs(self.sim)
 
         # object informations
         # object0
