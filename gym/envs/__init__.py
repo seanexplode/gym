@@ -79,6 +79,13 @@ register(
 )
 
 register(
+    id='JumpingCar-v0',
+    entry_point='gym.envs.classic_control:JumpingCarEnv',
+    max_episode_steps=100,
+    reward_threshold=200,
+)
+
+register(
     id='Pendulum-v0',
     entry_point='gym.envs.classic_control:PendulumEnv',
     max_episode_steps=200,
