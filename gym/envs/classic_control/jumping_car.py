@@ -78,15 +78,16 @@ class JumpingCarEnv(gym.Env):
         if (posy==self.min_posy and vely<0): vely = 0
 
 
-        #  done = bool(posx >= self.goal_posx)
-        done = np.absolute(posx - self.goal_posx) < delta and np.absolute(posy - self.goal_posy) < delta
+        nearby_goal = np.absolute(posx - self.goal_posx) < delta and np.absolute(posy - self.goal_posy) < delta
 
-        reward = 0
-        if done:
+        if nearby_goal:
             reward = 100.0
-        #  reward-= math.pow(action[0],2)*0.1
+        else:
+            reward = 0.0
 
         self.state = np.array([posx, posy, velx, vely])
+
+        done = False
         return self.state, reward, done, {}
 
     def reset(self):
