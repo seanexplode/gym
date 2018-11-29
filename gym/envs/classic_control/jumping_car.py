@@ -20,15 +20,15 @@ class JumpingCarEnv(gym.Env):
         self.min_actiony = 0
         self.max_actionx = 1.0
         self.max_actiony = 1.0
-        self.min_posx = -1.2
-        self.min_posy = -1.2
-        self.max_posx = 0.6
-        self.max_posy = 0.6
-        self.max_speedx = 0.07
-        self.max_speedy = 0.07
+        self.min_posx = -1.0
+        self.min_posy = -1.0
+        self.max_posx = 1.0
+        self.max_posy = 1.0
+        self.max_speedx = 0.1
+        self.max_speedy = 0.1
         self.goal_posx = 0.45 # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.goal_posy = -1.05 # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.power = 0.0015
+        self.goal_posy = -0.8 # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
+        self.power = 0.005
 
         self.low_state = np.array([self.min_posx, self.min_posy, -self.max_speedx, -self.max_speedy])
         self.high_state = np.array([self.max_posx, self.max_posy, self.max_speedx, self.max_speedy])
@@ -64,7 +64,7 @@ class JumpingCarEnv(gym.Env):
             # change vely
             vely += forcey*self.power
         else:
-            vely -= 0.0001
+            vely -= 0.00025
 
         posx += velx
         posy += vely
@@ -81,7 +81,7 @@ class JumpingCarEnv(gym.Env):
         nearby_goal = np.absolute(posx - self.goal_posx) < delta and np.absolute(posy - self.goal_posy) < delta
 
         if nearby_goal:
-            reward = 100.0
+            reward = 1.0
         else:
             reward = 0.0
 
@@ -91,8 +91,8 @@ class JumpingCarEnv(gym.Env):
         return self.state, reward, done, {}
 
     def reset(self):
-        self.state = np.array([self.np_random.uniform(low=-0.6, high=-0.4), self.min_posy, 0, 0])
-        #  self.state = np.array([self.goal_posx, self.goal_posy + 0.1, 0, 0])
+        #  self.state = np.array([self.np_random.uniform(low=-0.6, high=-0.4), self.min_posy, 0, 0])
+        self.state = np.array([self.goal_posx, self.goal_posy + 0.1, 0, 0])
         return np.array(self.state)
 
 #    def get_state(self):
@@ -148,14 +148,14 @@ class JumpingCarEnv(gym.Env):
 
             # drawing target
             targetcenterx = (self.goal_posx-self.min_posx)*scale
-            targetcentery = (self._height(self.goal_posx) + self.goal_posy - self.min_posy)*scale
+            targetbottom = (self._height(self.goal_posx) + self.goal_posy - self.min_posy)*scale
             targetwidth = carwidth
             targetheight = carheight
 
             l = targetcenterx - targetwidth/2
             r = targetcenterx + targetwidth/2
-            t = targetcentery + targetheight/2
-            b = targetcentery - targetheight/2
+            t = targetbottom + targetheight
+            b = targetbottom
             print((l, r, t, b))
             target = rendering.FilledPolygon([(l,b), (l,t), (r,t), (r,b)])
             target.set_color(0, 0, .5)
