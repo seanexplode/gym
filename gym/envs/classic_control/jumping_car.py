@@ -28,7 +28,7 @@ class JumpingCarEnv(gym.Env):
         self.max_speedy = 1
         self.goal_posx = 0.45 # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
         self.goal_posy = -0.8 # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.power = 0.011
+        self.power = 0.01
 
         self.low_state = np.array([self.min_posx, self.min_posy, -self.max_speedx, -self.max_speedy])
         self.high_state = np.array([self.max_posx, self.max_posy, self.max_speedx, self.max_speedy])
@@ -49,13 +49,16 @@ class JumpingCarEnv(gym.Env):
     def step(self, action):
 
         delta = 1e-2
+        ground_delta = 1e-3
         #  posx = self.state[0]
         #  velx = self.state[1]
         posx, posy, velx, vely = self.state
         forcex = min(max(action[0], -1.0), 1.0)
-        forcey = min(max(action[1], -1.0), 1.0)
+        forcey = min(max(action[1], self.min_actiony), 1.0)
 
-        if np.absolute(posy - self.min_posy) < delta:
+        # run this code only in case it was not in ground previous step
+        ground = np.absolute(posy - self.min_posy) < ground_delta
+        if ground:
             #  velx += force*self.power -0.0025 * math.cos(3*posx)
             velx += forcex*self.power
             if (velx > self.max_speedx): velx = self.max_speedx
@@ -63,8 +66,10 @@ class JumpingCarEnv(gym.Env):
 
             # change vely
             vely += forcey*self.power
-        else:
-            vely -= 0.00025
+
+            print('ground')
+
+        vely -= 0.00023
 
         posx += velx
         posy += vely
