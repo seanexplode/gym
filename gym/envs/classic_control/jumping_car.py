@@ -16,26 +16,25 @@ class JumpingCarEnv(gym.Env):
     }
 
     def __init__(self):
-        self.min_actionx = -1.0
         self.min_actiony = 0
         self.max_actionx = 1.0
         self.max_actiony = 1.0
         self.min_posx = -1.0
-        self.min_posy = -1.0
+        self.min_posy = -0.5
         self.max_posx = 1.0
-        self.max_posy = 1.0
-        self.max_speedx = 1
-        self.max_speedy = 1
+        self.max_posy = 0.5
+        self.max_speedx = 1.
+        self.max_speedy = 1.
         self.goal_posx = 0.45 # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.goal_posy = -0.8 # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.power = 0.01
+        self.goal_posy = 0.4  # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
+        self.power = 0.02
 
         self.low_state = np.array([self.min_posx, self.min_posy, -self.max_speedx, -self.max_speedy])
         self.high_state = np.array([self.max_posx, self.max_posy, self.max_speedx, self.max_speedy])
 
         self.viewer = None
 
-        self.action_space = spaces.Box(low=np.array([self.min_actionx, self.min_actiony]), 
+        self.action_space = spaces.Box(low=np.array([-self.max_actionx, self.min_actiony]), 
                                             high=np.array([self.max_actionx, self.max_actiony]))
         self.observation_space = spaces.Box(low=self.low_state, high=self.high_state)
 
@@ -48,7 +47,7 @@ class JumpingCarEnv(gym.Env):
 
     def step(self, action):
 
-        delta = 1e-2
+        delta = 1e-3
         ground_delta = 5e-4
         #  posx = self.state[0]
         #  velx = self.state[1]
@@ -67,7 +66,7 @@ class JumpingCarEnv(gym.Env):
             # change vely
             vely += forcey*self.power
 
-        vely -= 0.00023
+        vely -= 0.00022
 
         posx += velx
         posy += vely
@@ -110,7 +109,7 @@ class JumpingCarEnv(gym.Env):
 
     def render(self, mode='human'):
         screen_width = 600
-        screen_height = 600
+        screen_height = 300
 
         world_width = self.max_posx - self.min_posx
         scale = screen_width/world_width
