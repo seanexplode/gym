@@ -79,6 +79,13 @@ register(
 )
 
 register(
+    id='MountainCarContinuousSparse-v0',
+    entry_point='gym.envs.classic_control:SparseContinuous_MountainCarEnv',
+    max_episode_steps=999,
+    reward_threshold=90.0,
+)
+
+register(
     id='JumpingCar-v0',
     entry_point='gym.envs.classic_control:JumpingCarEnv',
     max_episode_steps=200,
