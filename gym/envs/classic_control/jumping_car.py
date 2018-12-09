@@ -49,7 +49,7 @@ class JumpingCarEnv(gym.Env):
     def step(self, action):
 
         delta = 1e-2
-        ground_delta = 1e-3
+        ground_delta = 5e-4
         #  posx = self.state[0]
         #  velx = self.state[1]
         posx, posy, velx, vely = self.state
@@ -66,8 +66,6 @@ class JumpingCarEnv(gym.Env):
 
             # change vely
             vely += forcey*self.power
-
-            print('ground')
 
         vely -= 0.00023
 
