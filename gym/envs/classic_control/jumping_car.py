@@ -26,8 +26,8 @@ class JumpingCarEnv(gym.Env):
         self.max_speedx = 1.
         self.max_speedy = 1.
         self.goal_posx = 0.45 # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.goal_posy = 0.4  # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.power = 0.02
+        self.goal_posy = 0    # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
+        self.power = 0.015
 
         self.low_state = np.array([self.min_posx, self.min_posy, -self.max_speedx, -self.max_speedy])
         self.high_state = np.array([self.max_posx, self.max_posy, self.max_speedx, self.max_speedy])
