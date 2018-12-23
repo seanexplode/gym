@@ -25,9 +25,9 @@ class JumpingCarEnv(gym.Env):
         self.max_posy = 0.5
         self.max_speedx = 1.
         self.max_speedy = 1.
-        self.goal_posx = 0.45 # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.goal_posy = 0    # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.power = 0.015
+        self.goal_posx = 0.45   # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
+        self.goal_posy = -0.3   # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
+        self.power = 0.01
 
         self.low_state = np.array([self.min_posx, self.min_posy, -self.max_speedx, -self.max_speedy])
         self.high_state = np.array([self.max_posx, self.max_posy, self.max_speedx, self.max_speedy])
@@ -66,7 +66,7 @@ class JumpingCarEnv(gym.Env):
             # change vely
             vely += forcey*self.power
 
-        vely -= 0.00022
+        vely -= 0.00024
 
         posx += velx
         posy += vely
@@ -80,7 +80,8 @@ class JumpingCarEnv(gym.Env):
         if (posy==self.min_posy and vely<0): vely = 0
 
 
-        nearby_goal = np.absolute(posx - self.goal_posx) < delta and np.absolute(posy - self.goal_posy) < delta
+        #  nearby_goal = np.absolute(posx - self.goal_posx) < delta and np.absolute(posy - self.goal_posy) < delta
+        nearby_goal = ((posx - self.goal_posx) ** 2 + (posy - self.goal_posy) ** 2) < delta ** 2
 
         if nearby_goal:
             reward = 1.0
@@ -93,8 +94,8 @@ class JumpingCarEnv(gym.Env):
         return self.state, reward, done, {}
 
     def reset(self):
-        self.state = np.array([self.np_random.uniform(low=-0.6, high=-0.4), self.min_posy, 0, 0])
-        #  self.state = np.array([self.goal_posx, self.goal_posy + 0.1, 0, 0])
+        #  self.state = np.array([self.np_random.uniform(low=-0.6, high=-0.4), self.min_posy, 0, 0])
+        self.state = np.array([self.goal_posx, self.goal_posy + 0.1, 0, 0])
         return np.array(self.state)
 
 #    def get_state(self):
