@@ -19,15 +19,15 @@ class JumpingCarEnv(gym.Env):
         self.min_actiony = 0
         self.max_actionx = 1.0
         self.max_actiony = 1.0
-        self.min_posx = -1.0
-        self.min_posy = -0.5
-        self.max_posx = 1.0
-        self.max_posy = 0.5
+        self.min_posx = -5.0
+        self.min_posy = -2.5
+        self.max_posx = 5.0
+        self.max_posy = 2.5
         self.max_speedx = 1.
         self.max_speedy = 1.
-        self.goal_posx = 0.45   # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.goal_posy = -0.3   # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
-        self.power = 0.01
+        self.goal_posx = 0.45 * self.max_posx   # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
+        self.goal_posy = -0.55 * self.max_posy   # was 0.5 in gym, 0.45 in Arnaud de Broissia's version
+        self.power = 0.01 * self.max_posx
 
         self.low_state = np.array([self.min_posx, self.min_posy, -self.max_speedx, -self.max_speedy])
         self.high_state = np.array([self.max_posx, self.max_posy, self.max_speedx, self.max_speedy])
@@ -47,7 +47,7 @@ class JumpingCarEnv(gym.Env):
 
     def step(self, action):
 
-        delta = 2e-3
+        delta = 1e-2
         ground_delta = delta / 20
         #  posx = self.state[0]
         #  velx = self.state[1]
@@ -66,7 +66,7 @@ class JumpingCarEnv(gym.Env):
             # change vely
             vely += forcey*self.power
 
-        vely -= 0.00024
+        vely -= 0.0002 * self.max_posx
 
         posx += velx
         posy += vely
@@ -110,7 +110,8 @@ class JumpingCarEnv(gym.Env):
 
     def render(self, mode='human'):
         screen_width = 600
-        screen_height = 300
+        #  screen_height = 300
+        screen_height = int(screen_width * (self.max_posy - self.min_posy) / (self.max_posx - self.min_posx))
 
         world_width = self.max_posx - self.min_posx
         scale = screen_width/world_width
